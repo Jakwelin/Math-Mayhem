@@ -34,6 +34,11 @@
             text-decoration: none;
             color: #fff;
             transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -41,7 +46,17 @@
             border-color: #ff66aa;
         }
         .card h3 { margin: 10px 0 5px 0; }
-        .card p { font-size: 0.85em; color: #aaa; }
+        .card p { font-size: 0.85em; color: #aaa; margin: 0; }
+        
+        /* Special styling to highlight the uploader card */
+        .upload-card {
+            border: 2px dashed #555;
+            background-color: #181818;
+        }
+        .upload-card:hover {
+            border-color: #66ffaa;
+            background-color: #1f2a24;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +65,13 @@
     <p class="subtitle">Select an interactive module to begin</p>
 
     <div class="grid">
+        <!-- Local File Uploader Card -->
+        <label class="card upload-card">
+            <input type="file" id="localGameInput" accept=".html" style="display: none;">
+            <h3>📂 Upload Local Game</h3>
+            <p>Load any .html game off your device.</p>
+        </label>
+
         <!-- WebOsu Link -->
         <a href="./Webosu/index.html" class="card">
             <h3>osu! Web</h3>
@@ -122,6 +144,22 @@
             <p>Top down GTA.</p>
         </a>
     </div>
+
+    <script>
+        document.getElementById('localGameInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Create a temporary secure URL for the uploaded HTML file and open it
+                const blob = new Blob([e.target.result], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                window.location.href = blobUrl;
+            };
+            reader.readAsText(file);
+        });
+    </script>
 
 </body>
 </html>
